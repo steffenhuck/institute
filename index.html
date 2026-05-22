@@ -27,7 +27,7 @@
       --hover-6: #c8cc50;
 
       --lake: #d0d0d0;
-      --badge-bg: #f5f0e8;
+      --badge-bg: #f0f2c8;
       --badge-ring: #a8a8a0;
     }
 
@@ -58,35 +58,50 @@
       position: absolute;
       top: 64px;
       right: 24px;
-      width: 120px;
-      height: 120px;
+      width: 118px;
+      height: 118px;
       border-radius: 50%;
       background: var(--badge-bg);
-      border: 3px solid var(--badge-ring);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 0 8px;
+      padding: 0 12px 12px 12px;
     }
 
     .badge-number {
-      font-size: 2.8rem;
-      font-weight: 300;
+      font-size: 2.1rem;
+      font-weight: 400;
       letter-spacing: -0.02em;
       line-height: 1;
       color: #a0a098;
     }
 
     .badge-text {
-      font-size: 0.62rem;
+      margin-top: 0.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1rem;
+    }
+
+    .badge-years {
+      font-size: 0.66rem;
       font-weight: 500;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: #a0a098;
-      line-height: 1.5;
-      margin-top: 0.25rem;
+      line-height: 1.2;
+    }
+
+    .badge-excellence {
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #a0a098;
+      line-height: 1.2;
     }
 
     /* ── INSTITUTE NAME ── */
@@ -178,13 +193,14 @@
     @media (max-width: 640px) {
       .hero { padding: 56px 20px 40px; }
       .badge {
-        width: 84px;
-        height: 84px;
+        width: 114px;
+        height: 114px;
         top: 48px;
         right: 20px;
       }
-      .badge-number { font-size: 2rem; }
-      .badge-text { font-size: 0.48rem; }
+      .badge-number { font-size: 2.6rem; }
+      .badge-years { font-size: 0.5rem; }
+      .badge-excellence { font-size: 0.64rem; }
       .institute-name {
         font-size: 1.5rem;
         max-width: calc(100% - 100px);
@@ -202,11 +218,14 @@
 
     <div class="badge" aria-label="25 Years of Excellence">
       <span class="badge-number">25</span>
-      <span class="badge-text">Years of<br>Excellence</span>
+      <div class="badge-text">
+        <span class="badge-years">Years of</span>
+        <span class="badge-excellence">Excellence</span>
+      </div>
     </div>
 
     <h1 class="institute-name">The Institute<br>for the Advancement<br>of Dictatorships</h1>
-    <p class="founded">founded in 2001</p>
+
 
     <svg class="lake-svg"
          xmlns="http://www.w3.org/2000/svg"

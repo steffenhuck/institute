@@ -11,6 +11,8 @@
       --background: #c0c438;
       --text: #2f2f2b;
       --meta: #6e6e64;
+      --success: #e8e800;
+      --error: #7a1a00;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -85,8 +87,6 @@
       margin-bottom: 10px;
     }
 
-    .form-block:last-of-type { margin-bottom: 0; }
-
     .field-label {
       display: block;
       font-size: 0.78rem;
@@ -130,6 +130,16 @@
       resize: vertical;
       min-height: 140px;
       line-height: 1.6;
+    }
+
+    .field-error {
+      display: none;
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--error);
     }
 
     .letter-tabs {
@@ -203,10 +213,20 @@
 
     .upload-confirm {
       font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
+      font-weight: 700;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--meta);
+      color: var(--success);
+      display: none;
+      text-shadow: 0 0 8px rgba(200,200,0,0.4);
+    }
+
+    .upload-error {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--error);
       display: none;
     }
 
@@ -243,8 +263,11 @@
 
     .submit-confirm {
       font-size: 0.88rem;
-      font-style: italic;
-      color: var(--meta);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--success);
+      text-shadow: 0 0 10px rgba(200,200,0,0.4);
       display: none;
     }
 
@@ -288,21 +311,19 @@
         <option>Electrician</option>
         <option>Chef de Cuisine</option>
       </select>
+      <p class="field-error" id="err-position">A position must be selected.</p>
     </div>
 
     <div class="form-block">
       <label class="field-label" for="name">Name</label>
       <input class="field-input" type="text" id="name" autocomplete="name">
+      <p class="field-error" id="err-name">A name is required.</p>
     </div>
 
     <div class="form-block">
       <label class="field-label" for="email">Email</label>
       <input class="field-input" type="email" id="email" autocomplete="email">
-    </div>
-
-    <div class="form-block">
-      <label class="field-label" for="dob">Date of Birth</label>
-      <input class="field-input" type="text" id="dob" placeholder="dd / mm / yyyy">
+      <p class="field-error" id="err-email">An email address is required.</p>
     </div>
 
     <div class="form-block">
@@ -517,10 +538,12 @@
           <label class="file-input-label" for="letter-file">Choose PDF</label>
           <input class="file-input" type="file" id="letter-file" accept=".pdf" onchange="fileChosen(this, 'letter-name')">
           <span class="file-name" id="letter-name"></span>
-          <button class="upload-btn" onclick="doUpload(this, 'letter-confirm', 'careers_upload_letter')">Upload</button>
+          <button class="upload-btn" onclick="doUpload(this, 'letter-confirm', 'letter-upload-error', 'letter-file', 'careers_upload_letter')">Upload</button>
           <span class="upload-confirm" id="letter-confirm">Uploaded.</span>
+          <span class="upload-error" id="letter-upload-error">No file selected.</span>
         </div>
       </div>
+      <p class="field-error" id="err-letter">A letter of motivation is required.</p>
     </div>
 
     <div class="form-block">
@@ -529,9 +552,11 @@
         <label class="file-input-label" for="cv-file">Choose PDF</label>
         <input class="file-input" type="file" id="cv-file" accept=".pdf" onchange="fileChosen(this, 'cv-name')">
         <span class="file-name" id="cv-name"></span>
-        <button class="upload-btn" onclick="doUpload(this, 'cv-confirm', 'careers_upload_cv')">Upload</button>
+        <button class="upload-btn" onclick="doUpload(this, 'cv-confirm', 'cv-upload-error', 'cv-file', 'careers_upload_cv')">Upload</button>
         <span class="upload-confirm" id="cv-confirm">Uploaded.</span>
+        <span class="upload-error" id="cv-upload-error">No file selected.</span>
       </div>
+      <p class="field-error" id="err-cv">A curriculum vitae is required.</p>
     </div>
 
     <div class="form-block">
@@ -540,8 +565,9 @@
         <label class="file-input-label" for="support-files">Choose Files</label>
         <input class="file-input" type="file" id="support-files" accept=".pdf,.jpg,.jpeg,.png" multiple onchange="fileChosen(this, 'support-name')">
         <span class="file-name" id="support-name"></span>
-        <button class="upload-btn" onclick="doUpload(this, 'support-confirm', 'careers_upload_supporting')">Upload</button>
+        <button class="upload-btn" onclick="doUpload(this, 'support-confirm', 'support-upload-error', 'support-files', 'careers_upload_supporting')">Upload</button>
         <span class="upload-confirm" id="support-confirm">Uploaded.</span>
+        <span class="upload-error" id="support-upload-error">No file selected.</span>
       </div>
     </div>
 
@@ -555,6 +581,9 @@
   </div>
 
   <script>
+    // track which uploads have been completed
+    const uploaded = { letter: false, cv: false };
+
     function switchTab(btn, panel) {
       document.querySelectorAll('.letter-tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.letter-panel').forEach(p => p.classList.remove('active'));
@@ -573,17 +602,83 @@
       }
     }
 
-    function doUpload(btn, confirmId, eventName) {
+    function doUpload(btn, confirmId, errorId, fileInputId, eventName) {
+      const fileInput = document.getElementById(fileInputId);
       const confirmEl = document.getElementById(confirmId);
+      const errorEl = document.getElementById(errorId);
+
+      if (!fileInput.files || fileInput.files.length === 0) {
+        errorEl.style.display = 'inline';
+        confirmEl.style.display = 'none';
+        return;
+      }
+
+      errorEl.style.display = 'none';
       confirmEl.style.display = 'inline';
+
+      if (eventName === 'careers_upload_letter') uploaded.letter = true;
+      if (eventName === 'careers_upload_cv') uploaded.cv = true;
+
       if (window.goatcounter && window.goatcounter.count) {
         window.goatcounter.count({ path: eventName, title: eventName, event: true });
       }
     }
 
     function doSubmit() {
-      const confirm = document.getElementById('submit-confirm');
-      confirm.style.display = 'inline';
+      let valid = true;
+
+      // position
+      const position = document.getElementById('position');
+      const errPosition = document.getElementById('err-position');
+      if (!position.value) {
+        errPosition.style.display = 'block'; valid = false;
+      } else {
+        errPosition.style.display = 'none';
+      }
+
+      // name
+      const name = document.getElementById('name');
+      const errName = document.getElementById('err-name');
+      if (!name.value.trim()) {
+        errName.style.display = 'block'; valid = false;
+      } else {
+        errName.style.display = 'none';
+      }
+
+      // email
+      const email = document.getElementById('email');
+      const errEmail = document.getElementById('err-email');
+      if (!email.value.trim()) {
+        errEmail.style.display = 'block'; valid = false;
+      } else {
+        errEmail.style.display = 'none';
+      }
+
+      // letter of motivation
+      const letterWritten = document.getElementById('letter-text').value.trim();
+      const letterPanel = document.getElementById('panel-write');
+      const isWriteActive = letterPanel.classList.contains('active');
+      const errLetter = document.getElementById('err-letter');
+      if (isWriteActive && !letterWritten) {
+        errLetter.style.display = 'block'; valid = false;
+      } else if (!isWriteActive && !uploaded.letter) {
+        errLetter.style.display = 'block'; valid = false;
+      } else {
+        errLetter.style.display = 'none';
+      }
+
+      // cv
+      const errCv = document.getElementById('err-cv');
+      if (!uploaded.cv) {
+        errCv.style.display = 'block'; valid = false;
+      } else {
+        errCv.style.display = 'none';
+      }
+
+      if (!valid) return;
+
+      document.getElementById('submit-confirm').style.display = 'inline';
+
       if (window.goatcounter && window.goatcounter.count) {
         window.goatcounter.count({ path: 'careers_submit', title: 'careers_submit', event: true });
       }

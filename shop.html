@@ -300,6 +300,10 @@
   <div class="cart-panel" id="cart-panel">
     <p class="cart-title">Your Cart</p>
     <div id="cart-items"><p class="cart-empty">Your cart is empty.</p></div>
+    <div id="checkout-block" style="display:none; margin-top:1.2rem;">
+      <button class="add-btn" style="width:100%; padding:0.7rem 1rem;" onclick="doCheckout()">Checkout</button>
+      <p id="checkout-confirm" style="display:none; margin-top:0.8rem; font-size:0.82rem; font-style:italic; color:var(--meta);">Your order has been received. The Institute will be in touch regarding delivery.</p>
+    </div>
   </div>
 
   <div class="container">
@@ -447,6 +451,14 @@
       html += '<hr class="cart-divider">';
       html += `<div class="cart-total"><span>Total</span><span>${formatPrice(total)}</span></div>`;
       itemsEl.innerHTML = html;
+      document.getElementById('checkout-block').style.display = 'block';
+    }
+
+    function doCheckout() {
+      document.getElementById("checkout-confirm").style.display = "block";
+      if (window.goatcounter && window.goatcounter.count) {
+        window.goatcounter.count({ path: "shop_checkout", title: "shop_checkout", event: true });
+      }
     }
 
     function toggleCart() {

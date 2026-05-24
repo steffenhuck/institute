@@ -289,6 +289,35 @@
       .cart-panel { right: 20px; min-width: 260px; }
       .page-title-wrap { margin-bottom: 3.2rem; }
     }
+
+    /* ── LIGHTBOX ── */
+    .product-image {
+      cursor: zoom-in;
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(47,47,43,0.85);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 70vw;
+      max-height: 70vh;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+      cursor: default;
+    }
   </style>
 </head>
 <body>
@@ -319,7 +348,7 @@
 
     <div class="product-grid">
       <div class="product">
-        <img class="product-image" src="mug-iad.png" alt="The Lake Mug">
+        <img class="product-image" src="mug-iad.png" alt="The Lake Mug" onclick="openLightbox(\'mug-iad.png\', \'The Lake Mug\')">
         <p class="product-name">The Lake Mug</p>
         <p class="product-desc">Unlimited.<br>Dishwasher safe.</p>
         <div class="product-footer">
@@ -329,7 +358,7 @@
       </div>
 
       <div class="product">
-        <img class="product-image" src="mug-gaza.png" alt="The Gaza Mug — Collector's Edition">
+        <img class="product-image" src="mug-gaza.png" alt="The Gaza Mug — Collector's Edition" onclick="openLightbox(\'mug-gaza.png\', \'The Gaza Mug — Collector's Edition\')">
         <p class="product-name">The Gaza Mug — Collector's Edition</p>
         <p class="product-desc">Available in olive and black. Limited edition of 50 each. Hand painted by children. Not dishwasher safe.</p>
         <div class="product-footer">
@@ -347,7 +376,7 @@
 
     <div class="product-grid">
       <div class="product">
-        <img class="product-image" src="guillotine.png" alt="The Guillotine">
+        <img class="product-image" src="guillotine.png" alt="The Guillotine" onclick="openLightbox(\'guillotine.png\', \'The Guillotine\')">
         <p class="product-name">The Guillotine</p>
         <p class="product-desc">Full size. Suitable for indoor and outdoor use. Twenty-five year warranty.</p>
         <div class="product-footer">
@@ -357,7 +386,7 @@
       </div>
 
       <div class="product">
-        <img class="product-image" src="unit-4b-71.png" alt="IAD Unit 4B-71">
+        <img class="product-image" src="unit-4b-71.png" alt="IAD Unit 4B-71" onclick="openLightbox(\'unit-4b-71.png\', \'IAD Unit 4B-71\')">
         <p class="product-name">IAD Unit 4B-71</p>
         <p class="product-desc">Our most simple and effective unit yet. Does not require any previous experience.</p>
         <div class="product-footer">
@@ -372,7 +401,7 @@
 
     <div class="product-grid">
       <div class="product">
-        <img class="product-image" src="cap-iad.png" alt="The Lake Cap">
+        <img class="product-image" src="cap-iad.png" alt="The Lake Cap" onclick="openLightbox(\'cap-iad.png\', \'The Lake Cap\')">
         <p class="product-name">The Lake Cap</p>
         <p class="product-desc">Unlimited.</p>
         <div class="product-footer">
@@ -382,7 +411,7 @@
       </div>
 
       <div class="product">
-        <img class="product-image" src="cap-stalin.png" alt="Cap S">
+        <img class="product-image" src="cap-stalin.png" alt="Cap S" onclick="openLightbox(\'cap-stalin.png\', \'Cap S\')">
         <p class="product-name">Cap S</p>
         <p class="product-desc">Lecturer Cap Series. Limited edition of 250.</p>
         <div class="product-footer">
@@ -392,7 +421,7 @@
       </div>
 
       <div class="product">
-        <img class="product-image" src="cap-goebbels.png" alt="Cap G">
+        <img class="product-image" src="cap-goebbels.png" alt="Cap G" onclick="openLightbox(\'cap-goebbels.png\', \'Cap G\')">
         <p class="product-name">Cap G</p>
         <p class="product-desc">Lecturer Cap Series. Limited edition of 250.</p>
         <div class="product-footer">
@@ -402,7 +431,7 @@
       </div>
 
       <div class="product">
-        <img class="product-image" src="cap-caesar.png" alt="Cap C">
+        <img class="product-image" src="cap-caesar.png" alt="Cap C" onclick="openLightbox(\'cap-caesar.png\', \'Cap C\')">
         <p class="product-name">Cap C</p>
         <p class="product-desc">Lecturer Cap Series. Limited edition of 250.</p>
         <div class="product-footer">
@@ -472,7 +501,27 @@
         panel.classList.remove('open');
       }
     });
+
+    function openLightbox(src, alt) {
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      img.src = src;
+      img.alt = alt;
+      lb.classList.add('open');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
   </script>
 
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()">
+  </div>
 </body>
 </html>

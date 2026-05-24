@@ -12,10 +12,8 @@
       --text: #2f2f2b;
       --meta: #6e6e64;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 100%; }
-
     body {
       background: var(--background);
       color: var(--text);
@@ -25,7 +23,6 @@
       text-rendering: optimizeLegibility;
       position: relative;
     }
-
     .container {
       position: relative;
       z-index: 1;
@@ -33,7 +30,6 @@
       margin: 0 auto;
       padding: 80px 24px 80px;
     }
-
     .institute-name {
       font-size: 2.1rem;
       font-weight: 600;
@@ -44,15 +40,12 @@
       text-decoration: none;
       display: block;
     }
-
     .institute-name:hover { opacity: 0.75; }
-
     .page-title-wrap {
       margin-top: 3.2rem;
       margin-bottom: 3.2rem;
       text-align: center;
     }
-
     .page-title {
       display: inline-block;
       background: #e8e8e8;
@@ -64,14 +57,30 @@
       text-transform: uppercase;
       color: var(--meta);
     }
-
     .body-text p {
       font-size: 1rem;
       line-height: 1.7;
       color: var(--text);
       margin-bottom: 1.6rem;
     }
-
+    .body-text p:last-child {
+      margin-bottom: 0;
+    }
+    .shop-pill {
+      display: inline-block;
+      background: #d4580c;
+      color: #fff;
+      padding: 0.15rem 0.75rem;
+      border-radius: 32px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      vertical-align: baseline;
+      transition: background 0.15s ease;
+    }
+    .shop-pill:hover { background: #b84a08; }
     .villa {
       display: block;
       margin: 2.8rem auto 0;
@@ -79,7 +88,6 @@
       max-width: 100%;
       height: auto;
     }
-
     .back {
       display: block;
       margin-top: 3.6rem;
@@ -89,9 +97,7 @@
       color: var(--meta);
       text-decoration: none;
     }
-
     .back:hover { color: var(--text); }
-
     @media (max-width: 640px) {
       .container { padding: 56px 20px 56px; }
       .institute-name { font-size: 1.5rem; }
@@ -99,24 +105,17 @@
   </style>
 </head>
 <body>
-
   <div class="container">
-
     <a href="index.html" class="institute-name">The Institute<br>for the Advancement<br>of Dictatorships</a>
-
     <div class="page-title-wrap">
       <p class="page-title">Our Location</p>
     </div>
-
     <div class="body-text">
       <p>The Institute occupies a nineteenth-century villa on the shores of Lake Geneva, Switzerland. It has been gifted to us by our founder.</p>
+      <p>We also have a <a href="shop.html" class="shop-pill">Gift Shop</a>.</p>
     </div>
-
     <img class="villa" src="villa.png" alt="The Institute, Lake Geneva">
-
     <a href="index.html" class="back">← The Institute</a>
-
   </div>
-
 </body>
 </html>
